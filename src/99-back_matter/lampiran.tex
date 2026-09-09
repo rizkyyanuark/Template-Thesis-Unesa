@@ -1,0 +1,88 @@
+\BukaLampiran
+
+\lampiran{\textit{Source code}}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bfseries,
+    commentstyle=\itshape\color{gray},
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    xleftmargin=2em,
+    framexleftmargin=1.5em,
+    tabsize=4,
+}
+
+\begin{lstlisting}[language=Python, caption={Algoritma \textit{Hybrid Vector-Graph Retrieval}}]
+ALGORITHM: HybridVectorGraphRetrieval
+
+INPUT:
+    Q           : kueri pengguna
+    VectorDB    : basis data vektor (Zilliz Cloud)
+    GraphDB     : basis data graf (Neo4j AuraDB)
+    Reranker    : model Cross-Encoder Reranker
+    mode        : "naive" | "subgraph" | "hybrid"
+    top_k       : jumlah dokumen yang diambil
+
+OUTPUT:
+    context     : konteks terstruktur untuk LLM
+
+BEGIN
+    result = {}
+
+    # === TAHAP 1: Dekomposisi Kata Kunci ===
+    IF mode IN {subgraph, hybrid} THEN
+        keyword_clues = VectorDB.search("ContentKeyword", Q)
+        (K_high, K_low) = LLM_decompose(Q, keyword_clues)
+        local_query  = combine(K_low, Q)
+        global_query = combine(K_high, Q)
+    END IF
+
+    # === TAHAP 2: Pencarian Vektor (Naive) ===
+    IF mode IN {naive, hybrid} THEN
+        paper_chunks = VectorDB.search("PaperChunk", Q, top_k * 3)
+    END IF
+
+    # === TAHAP 3: Pencarian Subgraf Lokal ===
+    IF mode IN {subgraph, hybrid} THEN
+        entities = EntitySubgraphRetrieval(local_query, VectorDB,
+                                           GraphDB, top_k)
+        subgraph_triples = GraphDB.shortest_path(entities, depth=2)
+        text_units = VectorDB.search("PaperChunk", local_query)
+    END IF
+
+    # === TAHAP 4: Pencarian Relasi Global ===
+    IF mode IN {hybrid} THEN
+        relationships = VectorDB.search("RelationshipEmbedding",
+                                         global_query, top_k * 2)
+        FOR EACH rel IN relationships DO
+            src_deg = GraphDB.get_degree(rel.src_id)
+            tgt_deg = GraphDB.get_degree(rel.tgt_id)
+            rel.distance = rel.distance /
+                (1 + 0.05 * (log(src_deg+1) + log(tgt_deg+1)))
+        END FOR
+        relationships = sort_ascending(relationships, key=distance)
+    END IF
+
+    # === TAHAP 5: Fusi dan Pemeringkatan Ulang ===
+    IF mode == hybrid THEN
+        ranked_papers = RRF_Rerank(paper_chunks, entities,
+                                    GraphDB, Reranker, Q, top_k)
+    ELSE IF mode == naive THEN
+        ranked_papers = Reranker.rerank(Q, paper_chunks, top_k)
+    END IF
+
+    # === TAHAP 6: Penyusunan Konteks ===
+    context = format_context(
+        paper_chunks  = ranked_papers,
+        entities      = entities,
+        relationships = relationships,
+        subgraph      = subgraph_triples,
+        text_units    = text_units
+    )
+
+    RETURN context
+END
+\end{lstlisting}

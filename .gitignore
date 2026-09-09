@@ -1,0 +1,71 @@
+# Build output directory
+build/
+out/
+
+# LaTeX build and auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.fmt
+*.fot
+*.gaux
+*.glo
+*.gls
+*.glg
+*.idx
+*.ilg
+*.ind
+*.ist
+*.loa
+*.lof
+*.log
+*.lot
+*.maf
+*.mtc*
+*.nav
+*.out
+*.pag
+*.ptc
+*.run.xml
+*.snm
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.tcp
+*.toc
+*.tps
+*.upb
+*.upa
+*.vrb
+*.w18
+*.xdv
+*.dvi
+indent.log
+
+# Glossaries and acronyms
+*.acr
+*.acn
+*.alg
+*.glsdefs
+
+# Minted temporary files
+_minted*
+*.pyg
+
+# Compiled thesis PDFs in root (keeps reference papers in git)
+ProposalTA.pdf
+Skripsi.pdf
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.bak
+*.swp
+*~
+.vscode/
+.history/

@@ -1,0 +1,35 @@
+% Daftar simbol matematika dan notasi naskah.
+% Tambahkan baris baru dengan format: $simbol$ & penjelasan simbol \\.
+\DaftarSimbol
+\begin{longtable}{p{0.15\textwidth} p{0.75\textwidth}}
+    % Struktur Pengetahuan
+    $G$                                     & \textit{Knowledge Graph} akademik, terdiri atas himpunan entitas ($E$), relasi ($R$), dan \textit{triplet} ($T$).   \\
+    $(h, r, t)$                             & \textit{Triplet} pengetahuan: \textit{head} (subjek), \textit{relation} (predikat), \textit{tail} (objek).          \\
+    $\mathcal{S}$                           & Himpunan \textit{triplet} hasil pemetaan fungsi ekstraksi informasi $f_{IE}$ dari teks $\mathcal{T}$.               \\
+    $E$                                     & Himpunan entitas dalam \textit{Knowledge Graph}.                                                                    \\
+    $R$                                     & Himpunan relasi dalam \textit{Knowledge Graph}.                                                                     \\
+
+    % Pemodelan Academic RAG
+    $q$ / $Q$                               & Pertanyaan atau kueri pengguna.                                                                                     \\
+    $K^{\text{content}}$                    & Himpunan kata kunci korpus akademik.                                                                                \\
+    $K^{\text{clues}}$                      & Kandidat \textit{clues} hasil penyaringan kata kunci berdasarkan ambang kemiripan $\tau$.                           \\
+    $f_{\text{embed}}(\cdot)$               & Fungsi \textit{embedding} yang memetakan teks ke representasi vektor.                                               \\
+    $\tau$                                  & Ambang batas (\textit{threshold}) kemiripan untuk penyaringan \textit{clues}.                                       \\
+    $\mathcal{K}_l, \mathcal{K}_h$          & Kata kunci hierarkis; $\mathcal{K}_l$ untuk pencarian lokal detail, $\mathcal{K}_h$ untuk konteks global.           \\
+    $\mathcal{L}_{\text{local}}$            & Konteks lokal berupa entitas, relasi, dan unit teks dari subgraf.                                                   \\
+    $\mathcal{L}_{\text{global}}$           & Konteks global berupa entitas, relasi, dan unit teks dari jejaring lintas domain.                                   \\
+    $\mathcal{E}, \mathcal{R}, \mathcal{T}$ & Komponen konteks: entitas ($\mathcal{E}$), relasi ($\mathcal{R}$), unit teks ($\mathcal{T}$).                       \\
+
+    % LLM
+    $P_\theta(y \mid y_{<t}, x)$            & Distribusi probabilitas bersyarat token pada model bahasa besar dengan parameter $\theta$.                          \\
+
+    % Metrik Evaluasi
+    $|Q|$                                   & Jumlah kueri dalam himpunan evaluasi.                                                                               \\
+    $\text{rank}_i$                         & Posisi dokumen relevan pertama pada kueri ke-$i$.                                                                   \\
+    $Q_{\text{relevan@}K}$                  & Himpunan kueri yang memiliki dokumen relevan dalam $K$ peringkat teratas.                                           \\
+    $|V|$                                   & Jumlah klaim terverifikasi dalam jawaban, untuk menghitung \textit{Faithfulness}.                                   \\
+    $|S|$                                   & Total klaim yang diekstraksi dari jawaban sistem.                                                                   \\
+    $E_q, E_{q_i}$                          & Vektor \textit{embedding} kueri asli ($E_q$) dan kueri sintetis ke-$i$ ($E_{q_i}$) untuk \textit{Answer Relevancy}. \\
+    $m$                                     & Jumlah pertanyaan sintetis yang dibangkitkan untuk menghitung \textit{Answer Relevancy}.                            \\
+    $M$                                     & Metode pencarian yang dievaluasi (misal: \textit{Naive}, \textit{Subgraph}, \textit{Hybrid}).                       \\
+\end{longtable}

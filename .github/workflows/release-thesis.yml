@@ -1,0 +1,95 @@
+name: Release versioned thesis PDF
+
+on:
+  push:
+    branches:
+      - skripsi
+      - main
+    paths:
+      - '**/*.tex'
+      - '**/*.cls'
+      - '**/*.sty'
+      - '**/*.bib'
+      - '**/*.bst'
+      - 'assets/**'
+      - '.latexmkrc'
+      - '.github/workflows/release-thesis.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: thesis-release
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/xu-cheng/texlive-full:latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install compression utilities
+        run: |
+          apk add --no-cache zip tar gzip
+
+      - name: Calculate release version
+        id: version
+        run: |
+          # Allow git operations inside docker workspace
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+          # Match existing release tags like v1.0.0, v1.0.1
+          latest_tag="$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n 1)"
+
+          if [ -z "$latest_tag" ]; then
+            version="v1.0.0"
+          else
+            numeric_version="${latest_tag#v}"
+            major="${numeric_version%%.*}"
+            remainder="${numeric_version#*.}"
+            minor="${remainder%%.*}"
+            patch="${remainder#*.}"
+            version="v${major}.${minor}.$((patch + 1))"
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Compile Skripsi and Proposal
+        run: |
+          latexmk -pdf Skripsi.tex
+          latexmk -pdf ProposalTA.tex
+
+      - name: Prepare versioned release files
+        run: |
+          # Copy compiled pdfs with versioned names
+          cp build/Skripsi.pdf "build/Skripsi-Unesa-${{ steps.version.outputs.version }}.pdf"
+          cp build/ProposalTA.pdf "build/Proposal-TA-Unesa-${{ steps.version.outputs.version }}.pdf"
+
+          # Package clean source bundle for offline and Overleaf users
+          mkdir -p dist/Template-Thesis-Unesa
+          tar --exclude='./.git*' --exclude='./build' --exclude='./dist' -cf - . | (cd dist/Template-Thesis-Unesa && tar -xf -)
+          cd dist
+          zip -r "Template-Thesis-Unesa-${{ steps.version.outputs.version }}.zip" Template-Thesis-Unesa
+          tar -czvf "Template-Thesis-Unesa-${{ steps.version.outputs.version }}.tar.gz" Template-Thesis-Unesa
+          cd ..
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: Release ${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            build/Skripsi-Unesa-${{ steps.version.outputs.version }}.pdf
+            build/Proposal-TA-Unesa-${{ steps.version.outputs.version }}.pdf
+            dist/Template-Thesis-Unesa-${{ steps.version.outputs.version }}.zip
+            dist/Template-Thesis-Unesa-${{ steps.version.outputs.version }}.tar.gz

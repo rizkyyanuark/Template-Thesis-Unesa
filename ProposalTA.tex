@@ -1,0 +1,52 @@
+% Berkas induk kompilasi proposal skripsi atau tugas akhir UNESA (Bab 1 s.d. 3).
+% Kompilasi via terminal: latexmk -pdf ProposalTA.tex
+
+% !TEX program = pdflatex
+\PassOptionsToPackage{table}{xcolor}
+\documentclass{ProposalUnesa}
+
+\pgfplotsset{compat=1.18}
+\usepackage{seqsplit}
+\loadglsentries{Istilah.tex}
+
+% Konfigurasi layer TikZ untuk diagram alir dan arsitektur sistem.
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+\usetikzlibrary{shadows}
+
+% Aktifkan baris ini untuk mempercepat kompilasi hanya pada bab yang sedang ditulis.
+% \includeonly{src/01-body/01-bab1}
+
+\begin{document}
+
+% Memuat metadata proposal dari DataSkripsi.tex.
+\input{DataSkripsi}
+
+% Bagian awal: penomoran halaman romawi kecil (i, ii, iii, ...).
+\Awal
+
+% Halaman administratif resmi untuk proposal.
+\HalamanJudul
+\HalamanPersetujuan
+\HalamanLembarRevisi
+\SuratPernyataanAI
+
+% Daftar isi, tabel, gambar, dan simbol.
+\DaftarIsi
+\DaftarTabel
+\DaftarGambar
+\input{src/00-front_matter/04-simbol}
+
+% Bagian inti: penomoran halaman arab dimulai dari angka 1.
+\Inti
+
+% Batang tubuh proposal (Bab 1 sampai Bab 3).
+\include{src/01-body/01-bab1}
+\include{src/01-body/02-bab2}
+\include{src/01-body/03-bab3}
+
+% Bagian akhir: daftar pustaka dan glosarium istilah.
+\DaftarPustaka{Pustaka}
+\Glosarium
+
+\end{document}

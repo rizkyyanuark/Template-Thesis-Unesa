@@ -1,0 +1,57 @@
+% Berkas induk kompilasi skripsi sarjana UNESA.
+% Kompilasi via terminal: latexmk -pdf Skripsi.tex
+
+\PassOptionsToPackage{table}{xcolor}
+\documentclass{SkripsiUnesa}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage[section]{placeins}
+\pgfplotsset{compat=1.18}
+\loadglsentries{Istilah.tex}
+\raggedbottom
+
+% Aktifkan baris ini untuk mempercepat kompilasi hanya pada bab yang sedang ditulis.
+% \includeonly{src/01-body/04-bab4}
+
+\begin{document}
+
+% Memuat metadata skripsi dari DataSkripsi.tex.
+\input{DataSkripsi}
+
+% Bagian awal: penomoran halaman romawi kecil (i, ii, iii, ...).
+\Awal
+
+% Halaman administratif sesuai urutan resmi panduan skripsi UNESA.
+\HalamanJudul
+\SampulDalam
+\HalamanPersetujuan
+\HalamanPengesahan
+\SuratOrisinalitas
+\SuratPernyataanAI
+
+% Abstrak bahasa Indonesia, bahasa Inggris, dan prakata.
+\input{src/00-front_matter/01-abstrak-id}
+\input{src/00-front_matter/02-abstrak-en}
+\input{src/00-front_matter/03-prakata}
+
+% Daftar isi, tabel, gambar, dan simbol.
+\DaftarIsi
+\DaftarTabel
+\DaftarGambar
+\input{src/00-front_matter/04-simbol}
+
+% Bagian inti: penomoran halaman arab dimulai dari angka 1.
+\Inti
+
+% Bab 1 sampai Bab 5.
+\include{src/01-body/01-bab1}
+\include{src/01-body/02-bab2}
+\include{src/01-body/03-bab3}
+\include{src/01-body/04-bab4}
+\include{src/01-body/05-bab5}
+
+% Bagian akhir: daftar pustaka (dari Pustaka.bib) dan lampiran.
+\DaftarPustaka{Pustaka}
+\input{src/99-back_matter/lampiran}
+
+\end{document}
