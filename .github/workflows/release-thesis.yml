@@ -59,13 +59,13 @@ jobs:
       - name: Compile Skripsi and Proposal
         run: |
           latexmk -pdf Skripsi.tex
-          latexmk -pdf ProposalTA.tex
+          latexmk -pdf Proposal.tex
 
       - name: Prepare versioned PDF files
         run: |
           # Copy compiled pdfs with versioned names
           cp build/Skripsi.pdf "build/Skripsi-Unesa-${{ steps.version.outputs.version }}.pdf"
-          cp build/ProposalTA.pdf "build/Proposal-TA-Unesa-${{ steps.version.outputs.version }}.pdf"
+          cp build/Proposal.pdf "build/Proposal-Unesa-${{ steps.version.outputs.version }}.pdf"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
@@ -77,4 +77,4 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             build/Skripsi-Unesa-${{ steps.version.outputs.version }}.pdf
-            build/Proposal-TA-Unesa-${{ steps.version.outputs.version }}.pdf
+            build/Proposal-Unesa-${{ steps.version.outputs.version }}.pdf

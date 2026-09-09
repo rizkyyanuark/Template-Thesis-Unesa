@@ -84,7 +84,7 @@
 	\renewcommand\@prodi{#1}
 }
 \newcommand\@prodiEng{Matematika}
-\DeclareRobustCommand\Programme[1]{%ProposalTA.tex
+\DeclareRobustCommand\Programme[1]{%
 	\renewcommand\@prodiEng{#1}
 }
 %\newcommand\@dep{Matematika}

@@ -33,7 +33,7 @@
 % GLOSSARIES CONFIGURATION
 % ==============================================================================
 % PENTING: Menggunakan 'nomain' dan TANPA 'automake' untuk menghindari rebuild loop
-% Untuk generate glossary, jalankan manual: makeglossaries ProposalTA
+% Untuk generate glossary, jalankan manual: makeglossaries Proposal
 % Atau gunakan latexmk yang akan handle otomatis via .latexmkrc
 % ==============================================================================
 \RequirePackage[toc,nonumberlist,nopostdot]{glossaries}

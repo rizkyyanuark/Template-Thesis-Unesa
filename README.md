@@ -29,7 +29,7 @@ Template ini dirancang agar **langsung jalan tanpa konfigurasi**:
 │                                                                 │
 │  User clone repository                                          │
 │         ↓                                                       │
-│  latexmk -pdf ProposalTA.tex                                    │
+│  latexmk -pdf Proposal.tex                                    │
 │         ↓                                                       │
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │ latexmk reads .latexmkrc (if exists)                    │   │
@@ -60,7 +60,7 @@ Template ini dirancang agar **langsung jalan tanpa konfigurasi**:
 
 ```
 proposal tugas akhir/
-├── 📄 ProposalTA.tex           # File utama PROPOSAL (Bab 1-3)
+├── 📄 Proposal.tex           # File utama PROPOSAL (Bab 1-3)
 ├── 📄 Skripsi.tex              # File utama SKRIPSI (Bab 1-5)
 ├── 🎨 ProposalUnesa.cls        # Class file untuk Proposal
 ├── 🎨 SkripsiUnesa.cls         # Class file untuk Skripsi
@@ -172,20 +172,20 @@ git clone https://github.com/rizkyyanuark/Tugas_Akhir.git
 cd "Tugas_Akhir/proposal tugas akhir"
 
 # Compile dengan latexmk (recommended)
-latexmk -pdf ProposalTA.tex
+latexmk -pdf Proposal.tex
 
 # Atau manual
-pdflatex ProposalTA
-bibtex ProposalTA
-pdflatex ProposalTA
-pdflatex ProposalTA
+pdflatex Proposal
+bibtex Proposal
+pdflatex Proposal
+pdflatex Proposal
 ```
 
 ### VS Code
 
 1. Install extension **LaTeX Workshop**
 2. Buka folder `proposal tugas akhir`
-3. Buka `ProposalTA.tex`
+3. Buka `Proposal.tex`
 4. Tekan **Ctrl+S** → Auto-compile!
 
 ---
@@ -267,7 +267,7 @@ Menurut \cite{contoh2024}, hasil penelitian menunjukkan...
 
 1. Upload semua file ke project baru
 2. Menu → Settings → Compiler: **pdfLaTeX**
-3. Main document: **ProposalTA.tex** atau **Skripsi.tex**
+3. Main document: **Proposal.tex** atau **Skripsi.tex**
 
 </details>
 
@@ -276,19 +276,19 @@ Menurut \cite{contoh2024}, hasil penelitian menunjukkan...
 
 ```bash
 # One-time full build
-latexmk -pdf ProposalTA.tex
+latexmk -pdf Proposal.tex
 
 # Continuous build (watch mode)
-latexmk -pvc -pdf ProposalTA.tex
+latexmk -pvc -pdf Proposal.tex
 
 # Clean
 latexmk -C
 
 # View PDF (Linux)
-xdg-open ProposalTA.pdf
+xdg-open Proposal.pdf
 
 # View PDF (macOS)
-open ProposalTA.pdf
+open Proposal.pdf
 ```
 
 </details>
@@ -335,7 +335,7 @@ tikz, pgfplots, listings, glossaries
 
 ```bash
 # Terminal
-latexmk -pdf ProposalTA.tex
+latexmk -pdf Proposal.tex
 
 # VS Code: Pilih recipe "📚 Full Build (Bibliography)"
 ```
@@ -368,13 +368,13 @@ tlmgr install nama_package
 **Solusi**:
 
 ```bash
-pdflatex ProposalTA
-bibtex ProposalTA
-pdflatex ProposalTA
-pdflatex ProposalTA
+pdflatex Proposal
+bibtex Proposal
+pdflatex Proposal
+pdflatex Proposal
 
 # Atau gunakan latexmk (otomatis)
-latexmk -pdf ProposalTA.tex
+latexmk -pdf Proposal.tex
 ```
 
 </details>
