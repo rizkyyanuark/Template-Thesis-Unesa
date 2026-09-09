@@ -13,7 +13,6 @@ on:
       - '**/*.bst'
       - 'assets/**'
       - '.latexmkrc'
-      - '.github/workflows/release-thesis.yml'
 
 permissions:
   contents: write
@@ -33,10 +32,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Install compression utilities
-        run: |
-          apk add --no-cache zip tar gzip
 
       - name: Calculate release version
         id: version
@@ -66,19 +61,11 @@ jobs:
           latexmk -pdf Skripsi.tex
           latexmk -pdf ProposalTA.tex
 
-      - name: Prepare versioned release files
+      - name: Prepare versioned PDF files
         run: |
           # Copy compiled pdfs with versioned names
           cp build/Skripsi.pdf "build/Skripsi-Unesa-${{ steps.version.outputs.version }}.pdf"
           cp build/ProposalTA.pdf "build/Proposal-TA-Unesa-${{ steps.version.outputs.version }}.pdf"
-
-          # Package clean source bundle for offline and Overleaf users
-          mkdir -p dist/Template-Thesis-Unesa
-          tar --exclude='./.git*' --exclude='./build' --exclude='./dist' -cf - . | (cd dist/Template-Thesis-Unesa && tar -xf -)
-          cd dist
-          zip -r "Template-Thesis-Unesa-${{ steps.version.outputs.version }}.zip" Template-Thesis-Unesa
-          tar -czvf "Template-Thesis-Unesa-${{ steps.version.outputs.version }}.tar.gz" Template-Thesis-Unesa
-          cd ..
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
@@ -91,5 +78,3 @@ jobs:
           files: |
             build/Skripsi-Unesa-${{ steps.version.outputs.version }}.pdf
             build/Proposal-TA-Unesa-${{ steps.version.outputs.version }}.pdf
-            dist/Template-Thesis-Unesa-${{ steps.version.outputs.version }}.zip
-            dist/Template-Thesis-Unesa-${{ steps.version.outputs.version }}.tar.gz
